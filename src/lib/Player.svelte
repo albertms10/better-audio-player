@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onDestroy, tick } from "svelte";
+  import { hashFileToSeed, hashStringToSeed } from "./utils";
 
   let audio: HTMLAudioElement;
   let timelineSection: HTMLElement;
@@ -15,7 +16,7 @@
   let pointB = $state<number | null>(null);
   let draggingLoopPoint = $state<"a" | "b" | null>(null);
 
-  const minLoopDuration = 0.05;
+  const minLoopDuration = 1;
 
   const loopActive = $derived(
     pointA !== null && pointB !== null && pointB > pointA,
@@ -51,9 +52,7 @@
   });
 
   const highlightStyle = $derived.by(() => {
-    if (!duration || pointA === null) {
-      return "";
-    }
+    if (!duration || pointA === null) return "";
 
     const rangeEnd = loopActive && pointB !== null ? pointB : currentTime;
     const start = Math.min(pointA, rangeEnd);
@@ -68,38 +67,13 @@
   });
 
   function formatTime(seconds: number) {
-    if (!Number.isFinite(seconds)) {
-      return "0:00.0";
-    }
+    if (!Number.isFinite(seconds)) return "0:00.0";
 
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     const tenth = Math.floor((seconds % 1) * 10);
 
     return `${mins}:${String(secs).padStart(2, "0")}.${tenth}`;
-  }
-
-  function hashStringToSeed(value: string) {
-    let hash = 2166136261;
-
-    for (let index = 0; index < value.length; index += 1) {
-      hash ^= value.charCodeAt(index);
-      hash = Math.imul(hash, 16777619);
-    }
-
-    return hash >>> 0;
-  }
-
-  async function hashFileToSeed(file: File) {
-    const digest = await crypto.subtle.digest(
-      "SHA-256",
-      await file.arrayBuffer(),
-    );
-    const bytes = new Uint8Array(digest);
-
-    return (
-      ((bytes[0] << 24) | (bytes[1] << 16) | (bytes[2] << 8) | bytes[3]) >>> 0
-    );
   }
 
   async function togglePlayback() {
@@ -179,15 +153,6 @@
     revokeObjectAudioUrl();
     objectAudioUrl = URL.createObjectURL(file);
     await loadAudioSource(objectAudioUrl, await hashFileToSeed(file));
-  }
-
-  async function loadAudioUrl() {
-    const source = urlInput.trim();
-
-    if (!source) return;
-
-    revokeObjectAudioUrl();
-    await loadAudioSource(source, hashStringToSeed(source));
   }
 
   async function pasteAndLoadFromClipboard() {
