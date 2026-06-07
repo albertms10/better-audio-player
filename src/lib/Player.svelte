@@ -237,6 +237,36 @@
     currentTime = (Number(value) / 100) * duration;
   }
 
+  // Mobile-first pointer-based scrub (drag) support for the seek bar
+  let draggingSeek = false;
+
+  function updateSeekFromPointer(event: PointerEvent) {
+    if (!duration) return;
+    const rect = timelineSection.getBoundingClientRect();
+    const percent = clamp((event.clientX - rect.left) / rect.width, 0, 1);
+    currentTime = percent * duration;
+  }
+
+  function startSeekDrag(event: PointerEvent) {
+    if (!duration) return;
+    event.preventDefault();
+    draggingSeek = true;
+    (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+    updateSeekFromPointer(event);
+  }
+
+  function handleSeekDrag(event: PointerEvent) {
+    if (!draggingSeek) return;
+    event.preventDefault();
+    updateSeekFromPointer(event);
+  }
+
+  function stopSeekDrag(event: PointerEvent) {
+    if (!draggingSeek) return;
+    (event.currentTarget as HTMLElement).releasePointerCapture(event.pointerId);
+    draggingSeek = false;
+  }
+
   function jump(seconds: number) {
     currentTime += seconds;
   }
@@ -465,6 +495,10 @@
       style={seekProgressStyle}
       aria-label="Audio position"
       oninput={(event) => seekToPercent(event.currentTarget.value)}
+      onpointerdown={startSeekDrag}
+      onpointermove={handleSeekDrag}
+      onpointerup={stopSeekDrag}
+      onpointercancel={stopSeekDrag}
     />
 
     {#if pointA !== null}
