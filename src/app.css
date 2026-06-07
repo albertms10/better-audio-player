@@ -82,6 +82,7 @@ body {
 
   height: 100vh;
   min-height: auto;
+  max-height: 256px;
 
   padding: 1rem;
 
