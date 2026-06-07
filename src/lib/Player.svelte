@@ -248,6 +248,20 @@
     pointB = null;
   }
 
+  function cycleLoop() {
+    if (pointA === null) {
+      setPointA();
+      return;
+    }
+
+    if (pointB === null) {
+      setPointB();
+      return;
+    }
+
+    clearLoop();
+  }
+
   function handleTimeUpdate() {
     if (
       loopActive &&
@@ -319,7 +333,9 @@
     aria-label="Timeline"
   >
     <div class="timeline-time" aria-hidden="true">
-      <output>{formatTime(currentTime)}</output>
+      <div>
+        <output>{formatTime(currentTime)}</output>
+      </div>
       <output>{formatTime(duration)}</output>
     </div>
 
@@ -374,6 +390,12 @@
       oninput={(event) => seekToPercent(event.currentTarget.value)}
     />
 
+    {#if pointA !== null}
+      <output class="loop-range"
+        >Loop: {formatTime(pointA)}–{pointB ? formatTime(pointB) : ""}</output
+      >
+    {/if}
+
     {#if !audioUrl}
       <div class="timeline-empty-source">
         <label class="file-picker">
@@ -403,36 +425,29 @@
   <section class="transport" aria-label="Playback controls">
     <button class="transport-button" onclick={() => jump(-1)}>−1</button>
 
-    <button
-      class="transport-button play"
-      aria-label={paused ? "Play" : "Pause"}
-      onclick={togglePlayback}
-    >
-      {paused ? "▶" : "❚❚"}
-    </button>
+    <div class="transport-middle">
+      <button
+        class="transport-button play"
+        aria-label={paused ? "Play" : "Pause"}
+        onclick={togglePlayback}
+      >
+        {paused ? "▶" : "❚❚"}
+      </button>
+      <button
+        class="transport-button loop-toggle"
+        class:active={loopActive}
+        class:pending={loopPending}
+        aria-label={loopActive
+          ? "Clear loop"
+          : loopPending
+            ? "Set loop end (B)"
+            : "Set loop start (A)"}
+        onclick={cycleLoop}
+      >
+        {pointA === null ? "A" : pointB === null ? "B" : "✕"}
+      </button>
+    </div>
 
     <button class="transport-button" onclick={() => jump(1)}>+1</button>
   </section>
-
-  <section class="loop-panel" aria-label="Loop controls">
-    <div class="loop-summary">
-      <span
-        >{loopActive
-          ? "Loop active"
-          : loopPending
-            ? "Choose B"
-            : "Loop off"}</span
-      >
-      <span>A {pointA === null ? "—" : formatTime(pointA)}</span>
-      <span>B {pointB === null ? "—" : formatTime(pointB)}</span>
-    </div>
-
-    <div class="loop-controls">
-      <button class="loop-action" onclick={setPointA}>A In</button>
-      <button class="loop-action" onclick={setPointB}>B Out</button>
-      <button class="loop-action danger" onclick={clearLoop}>Clear</button>
-    </div>
-  </section>
-
-
 </div>

@@ -180,10 +180,11 @@ body {
 
 .timeline-empty-source .file-picker,
 .timeline-empty-source .url-picker {
-  background: rgb(255 255 255 / 0.14);
-  border: 1px solid rgb(255 255 255 / 0.12);
+  background: rgb(255 255 255 / 0.28);
+  border: 1px solid rgb(255 255 255 / 0.18);
   color: white;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 18px rgb(15 23 42 / 0.12);
 }
 
 .timeline-empty-source .url-picker input {
@@ -193,8 +194,9 @@ body {
 @media (prefers-color-scheme: dark) {
   .timeline-empty-source .file-picker,
   .timeline-empty-source .url-picker {
-    background: rgb(15 23 42 / 0.48);
-    border: 1px solid rgb(255 255 255 / 0.06);
+    background: rgb(255 255 255 / 0.18);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    color: #0f172a;
   }
 }
 
@@ -209,6 +211,23 @@ body {
 
   font-size: 0.875rem;
   font-weight: 800;
+}
+
+.loop-range {
+  position: absolute;
+  inset: auto auto 16px 20px;
+  z-index: 6;
+
+  font-size: 0.6rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+
+  background: rgb(255 255 255 / 0.24);
+  color: var(--text);
+  border: 1px solid rgb(0 0 0 / 0.06);
+  box-shadow: 0 4px 12px rgb(15 23 42 / 0.08);
+  pointer-events: none;
 }
 
 .timeline-highlight {
@@ -431,9 +450,31 @@ body {
 
 .transport {
   display: grid;
-  grid-template-columns: 1fr 1.4fr 1fr;
+  grid-template-columns: 1fr auto 1fr;
   gap: 0.5rem;
   align-items: center;
+}
+
+.transport-middle {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.loop-toggle {
+  min-width: 44px;
+  padding: 0 0.5rem;
+}
+
+.loop-toggle.active {
+  background: var(--accent);
+  color: white;
+  border-color: transparent;
+}
+
+.loop-toggle.pending {
+  background: color-mix(in srgb, var(--accent-soft), white 55%);
+  color: color-mix(in srgb, var(--text), var(--accent) 35%);
 }
 
 .transport-button {
