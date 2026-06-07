@@ -407,12 +407,14 @@
     class="timeline-section"
     aria-label="Timeline"
   >
-    <div class="timeline-time" aria-hidden="true">
-      <div>
-        <output>{formatTime(currentTime)}</output>
+    {#if audioUrl}
+      <div class="timeline-time" aria-hidden="true">
+        <div>
+          <output>{formatTime(currentTime)}</output>
+        </div>
+        <output>{formatTime(duration)}</output>
       </div>
-      <output>{formatTime(duration)}</output>
-    </div>
+    {/if}
 
     <div
       class:active={loopActive}
