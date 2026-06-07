@@ -6,10 +6,13 @@ A small, mobile-first audio player built with Svelte focusing on a compact, at-a
 
 **Highlights:**
 
-- **Mobile-first scrubbing:** pointer-based drag support on the progress `seek` control for precise touch scrubbing.
+![Scrub](docs/img/scrub.png)
+
+- **Mobile-first scrubbing:** pointer-based drag support on the progress seek control for precise touch scrubbing.
 - **Animated visuals:** a blurred, animated blob gradient on the seek bar for a modern look (CSS-only).
-- **Focused UI:** page scrolling and overscroll are disabled so the player is always visible without scrolling.
-- **Interaction polish:** double-tap zoom is prevented on the seek control; global text selection is disabled to avoid accidental highlights while interacting.
+- **Looping & precise navigation:** set loop start/end (A/B) and drag handles to refine loop points; jump back/forward with buttons or keyboard for precise time adjustments.
+
+![Loop](docs/img/loop.png)
 
 **Developer quick-start:**
 
