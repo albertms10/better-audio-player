@@ -1,12 +1,12 @@
+@import "tailwindcss";
+
 :root {
   --bg: #ffffff;
   --surface: #f8fafc;
   --border: #dbe3eb;
   --text: #0f172a;
-
   --accent: #2563eb;
   --accent-soft: #bfdbfe;
-
   --radius: 18px;
 }
 
@@ -16,7 +16,6 @@
     --surface: #1e293b;
     --border: #334155;
     --text: #f8fafc;
-
     --accent: #60a5fa;
     --accent-soft: #1e40af;
   }
@@ -28,7 +27,6 @@
   box-sizing: border-box;
 }
 
-/* Ensure all elements use the same system font stack */
 html,
 body,
 :root,
@@ -55,11 +53,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-
   min-height: 100vh;
-
   padding: 1rem;
-
   background: var(--surface);
 }
 
@@ -73,31 +68,24 @@ body {
 .file-picker,
 .url-picker {
   min-height: 40px;
-
   border: 1px solid var(--border);
   border-radius: 999px;
-
   background: rgb(255 255 255 / 0.72);
 }
 
 .file-picker {
   display: grid;
   place-items: center;
-
   padding: 0 0.875rem;
-
   font-size: 0.875rem;
   font-weight: 700;
-
   cursor: pointer;
 }
 
 .file-picker input {
   position: absolute;
-
   width: 1px;
   height: 1px;
-
   opacity: 0;
   pointer-events: none;
 }
@@ -112,10 +100,8 @@ body {
   min-width: 0;
   border: 0;
   padding: 0 0.75rem;
-
   background: transparent;
   color: inherit;
-
   font: inherit;
   font-size: 0.875rem;
 }
@@ -126,9 +112,7 @@ body {
   border-left: 1px solid var(--border);
   border-radius: 0;
   padding: 0 0.875rem;
-
   background: transparent;
-
   font-size: 0.875rem;
 }
 
@@ -136,22 +120,17 @@ body {
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 0.35rem;
-
   background: rgb(255 255 255 / 0.5);
 }
 
 .source-panel summary {
   min-height: 40px;
   padding: 0 0.75rem;
-
   display: flex;
   align-items: center;
-
   color: color-mix(in srgb, var(--text), transparent 18%);
-
   font-size: 0.875rem;
   font-weight: 700;
-
   cursor: pointer;
 }
 
@@ -168,11 +147,9 @@ body {
   position: absolute;
   inset: 16px 20px auto;
   z-index: 4;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   color: white;
   font-variant-numeric: tabular-nums;
   pointer-events: none;
@@ -183,12 +160,10 @@ body {
   position: absolute;
   inset: 0;
   z-index: 5;
-
   display: flex;
   gap: 0.5rem;
   align-items: center;
   justify-content: center;
-
   padding: 1rem;
   pointer-events: auto;
 }
@@ -263,13 +238,10 @@ body {
 
 .timeline-time output {
   padding: 0.25rem 0.55rem;
-
   border: 1px solid rgb(255 255 255 / 0.22);
   border-radius: 999px;
-
   background: rgb(15 23 42 / 0.24);
   backdrop-filter: blur(10px);
-
   font-size: 0.875rem;
   font-weight: 800;
 }
@@ -278,12 +250,10 @@ body {
   position: absolute;
   inset: auto auto 16px 20px;
   z-index: 6;
-
   font-size: 0.6rem;
   font-weight: 600;
   padding: 0.15rem 0.5rem;
   border-radius: 999px;
-
   background: rgb(255 255 255 / 0.24);
   color: var(--text);
   border: 1px solid rgb(0 0 0 / 0.06);
@@ -295,22 +265,17 @@ body {
   position: absolute;
   inset: 10px auto 10px var(--loop-left, 0%);
   z-index: 3;
-
   width: max(var(--loop-width, 0%), 6px);
-
   border: 1px solid rgb(255 255 255 / 0.72);
   border-radius: 64px;
   corner-shape: squircle;
-
   background:
     linear-gradient(90deg, rgb(255 255 255 / 0.34), rgb(255 255 255 / 0.12)),
     color-mix(in srgb, var(--accent-soft), transparent 10%);
   box-shadow:
     inset 0 0 0 1px rgb(15 23 42 / 0.1),
     0 8px 24px rgb(15 23 42 / 0.18);
-
   pointer-events: none;
-
   opacity: 0;
   transform: translateZ(0);
   transition:
@@ -339,31 +304,23 @@ body {
 .loop-pending-end {
   position: absolute;
   top: 50%;
-
   display: grid;
   place-items: center;
-
   width: 28px;
   height: 28px;
-
   border-radius: 100%;
-
   background: rgb(15 23 42 / 0.72);
   color: white;
-
   font-size: 0.75rem;
   font-weight: 800;
   line-height: 1;
-
   transform: translate(-50%, -50%);
 }
 
 .loop-handle {
   min-height: 0;
   padding: 0;
-
   border: 0;
-
   cursor: grab;
   pointer-events: auto;
   touch-action: none;
@@ -384,10 +341,8 @@ body {
 
 .loop-pending-end {
   left: var(--loop-end, 100%);
-
   width: 12px;
   height: 12px;
-
   background: white;
   box-shadow: 0 0 0 8px rgb(255 255 255 / 0.22);
   animation: loop-end-pulse 900ms ease-in-out infinite;
@@ -396,18 +351,14 @@ body {
 .seek {
   position: relative;
   z-index: 2;
-
   display: block;
   appearance: none;
-
   width: 100%;
   height: 112px;
   margin: 0;
-
   border: 1px solid color-mix(in srgb, var(--border), white 22%);
   border-radius: 48px;
   corner-shape: squircle;
-
   background:
     linear-gradient(
       90deg,
@@ -436,7 +387,6 @@ body {
     inset 0 1px 0 rgb(255 255 255 / 0.28),
     inset 0 -26px 52px rgb(15 23 42 / 0.18),
     0 16px 36px rgb(15 23 42 / 0.12);
-
   cursor: grab;
   touch-action: pan-y;
   transition:
@@ -457,41 +407,34 @@ body {
 .seek::-webkit-slider-runnable-track {
   width: 100%;
   height: 112px;
-
   border-radius: 24px;
   background: transparent;
 }
 
 .seek::-moz-range-track {
   height: 112px;
-
   border-radius: 24px;
   background: transparent;
 }
 
 .seek::-moz-range-progress {
   height: 112px;
-
   border-radius: 24px 0 0 24px;
   background: rgba(0, 0, 0, 0.1);
 }
 
 .seek::-webkit-slider-thumb {
   appearance: none;
-
   width: 1px;
   height: 100%;
-
   cursor: grab;
 }
 
 .seek::-moz-range-thumb {
   width: 42px;
   height: 104px;
-
   border: 1px solid rgb(255 255 255 / 0.64);
   border-radius: 20px;
-
   background:
     linear-gradient(
       90deg,
@@ -505,7 +448,6 @@ body {
   box-shadow:
     0 8px 24px rgb(15 23 42 / 0.28),
     inset 0 1px 0 rgb(255 255 255 / 0.42);
-
   cursor: grab;
 }
 
@@ -558,7 +500,6 @@ body {
   height: 44px;
 }
 
-/* Ensure pill buttons don't get overridden padding from .transport-button */
 .transport-button.pill {
   padding: 0 !important;
 }
@@ -578,9 +519,7 @@ body {
   min-width: 0;
   min-height: 44px;
   padding: 0 0.35rem;
-
   border-radius: 999px;
-
   font-size: 0.875rem;
   line-height: 1;
 }
@@ -602,7 +541,6 @@ body {
 
 .play {
   min-height: 52px;
-
   border: 0;
   background: var(--accent);
   color: white;
@@ -611,11 +549,9 @@ body {
 .loop-panel {
   display: grid;
   gap: 0.5rem;
-
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 0.5rem;
-
   background: rgb(255 255 255 / 0.42);
 }
 
@@ -623,9 +559,7 @@ body {
   display: grid;
   grid-template-columns: 1fr auto auto;
   gap: 0.5rem;
-
   color: color-mix(in srgb, var(--text), transparent 22%);
-
   font-size: 0.75rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
@@ -640,12 +574,9 @@ body {
 .loop-action {
   min-height: 38px;
   padding: 0 0.5rem;
-
   border-radius: 999px;
-
   background: color-mix(in srgb, var(--accent-soft), white 55%);
   color: color-mix(in srgb, var(--text), var(--accent) 35%);
-
   font-size: 0.8125rem;
 }
 
@@ -655,13 +586,10 @@ body {
 
 button {
   min-height: 44px;
-
   border: 1px solid var(--border);
   border-radius: 14px;
-
   background: white;
   color: inherit;
-
   font-size: 1rem;
   font-weight: 600;
 }
@@ -669,7 +597,6 @@ button {
 .transport .transport-button {
   min-height: 44px;
   border-radius: 999px;
-
   font-size: 0.875rem;
 }
 
@@ -682,7 +609,6 @@ button {
   button {
     background: #0f172a;
   }
-
   .file-picker,
   .url-picker,
   .source-panel,
@@ -702,16 +628,13 @@ input:focus-visible {
   .player {
     max-width: 760px;
     min-height: auto;
-
     margin: 2rem auto;
     border: 1px solid var(--border);
     border-radius: var(--radius);
   }
-
   .audio-source {
     grid-template-columns: auto minmax(0, 1fr);
   }
-
   .transport,
   .loop-panel {
     max-width: 520px;
@@ -719,23 +642,19 @@ input:focus-visible {
     margin-inline: auto;
   }
 }
-
 @keyframes loop-pending {
   from {
     background-position: 0 0;
   }
-
   to {
     background-position: 24px 0;
   }
 }
-
 @keyframes loop-end-pulse {
   0%,
   100% {
     transform: translate(-50%, -50%) scale(0.88);
   }
-
   50% {
     transform: translate(-50%, -50%) scale(1.18);
   }
