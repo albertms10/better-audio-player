@@ -1,11 +1,11 @@
 <script lang="ts">
   import { onDestroy, tick } from "svelte";
-  import exerciseUrl from "../assets/exercise.mp3";
 
   let audio: HTMLAudioElement;
   let timelineSection: HTMLElement;
-  let audioUrl = $state(exerciseUrl);
+  let audioUrl = $state<string | null>(null);
   let urlInput = $state("");
+  let gradientSeed = $state<number>(Math.floor(Math.random() * 4294967296));
   let objectAudioUrl: string | null = null;
   let currentTime = $state(0);
   let duration = $state(0);
@@ -24,7 +24,30 @@
 
   const seekValue = $derived(duration ? (currentTime / duration) * 100 : 0);
 
-  const seekProgressStyle = $derived(`--seek-progress: ${seekValue}%;`);
+  const seekProgressStyle = $derived.by(() => {
+    const baseHue = gradientSeed % 360;
+    const secondHue = (baseHue + 42 + ((gradientSeed >>> 8) % 72)) % 360;
+    const thirdHue = (baseHue + 138 + ((gradientSeed >>> 16) % 88)) % 360;
+    const angle = 118 + (gradientSeed % 54);
+    const glowAX = 12 + ((gradientSeed >>> 3) % 26);
+    const glowAY = 12 + ((gradientSeed >>> 9) % 32);
+    const glowBX = 62 + ((gradientSeed >>> 15) % 26);
+    const glowBY = 18 + ((gradientSeed >>> 21) % 42);
+    const useThreeStops = (gradientSeed & 1) === 1;
+
+    return [
+      `--seek-progress: ${seekValue}%`,
+      `--gradient-angle: ${angle}deg`,
+      `--gradient-a: oklch(69% 0.18 ${baseHue})`,
+      `--gradient-b: oklch(72% 0.17 ${secondHue})`,
+      `--gradient-c: oklch(67% 0.19 ${thirdHue})`,
+      `--gradient-mid-stop: ${useThreeStops ? "var(--gradient-b)" : "var(--gradient-a)"}`,
+      `--glow-a-x: ${glowAX}%`,
+      `--glow-a-y: ${glowAY}%`,
+      `--glow-b-x: ${glowBX}%`,
+      `--glow-b-y: ${glowBY}%`,
+    ].join("; ");
+  });
 
   const highlightStyle = $derived.by(() => {
     if (!duration || pointA === null) {
@@ -55,6 +78,29 @@
     return `${mins}:${String(secs).padStart(2, "0")}.${tenth}`;
   }
 
+  function hashStringToSeed(value: string) {
+    let hash = 2166136261;
+
+    for (let index = 0; index < value.length; index += 1) {
+      hash ^= value.charCodeAt(index);
+      hash = Math.imul(hash, 16777619);
+    }
+
+    return hash >>> 0;
+  }
+
+  async function hashFileToSeed(file: File) {
+    const digest = await crypto.subtle.digest(
+      "SHA-256",
+      await file.arrayBuffer(),
+    );
+    const bytes = new Uint8Array(digest);
+
+    return (
+      ((bytes[0] << 24) | (bytes[1] << 16) | (bytes[2] << 8) | bytes[3]) >>> 0
+    );
+  }
+
   async function togglePlayback() {
     if (paused) {
       await audio.play();
@@ -71,8 +117,12 @@
     clearLoop();
   }
 
-  async function loadAudioSource(source: string) {
+  async function loadAudioSource(
+    source: string,
+    seed = hashStringToSeed(source),
+  ) {
     audioUrl = source;
+    gradientSeed = seed;
     resetAudioState();
 
     await tick();
@@ -94,7 +144,7 @@
 
     revokeObjectAudioUrl();
     objectAudioUrl = URL.createObjectURL(file);
-    await loadAudioSource(objectAudioUrl);
+    await loadAudioSource(objectAudioUrl, await hashFileToSeed(file));
   }
 
   async function loadAudioUrl() {
@@ -103,7 +153,7 @@
     if (!source) return;
 
     revokeObjectAudioUrl();
-    await loadAudioSource(source);
+    await loadAudioSource(source, hashStringToSeed(source));
   }
 
   function seekToPercent(value: string) {
@@ -258,7 +308,7 @@
     bind:currentTime
     bind:duration
     bind:paused
-    src={audioUrl}
+    src={audioUrl ?? undefined}
     ontimeupdate={handleTimeUpdate}
     preload="metadata"
   ></audio>
@@ -341,7 +391,13 @@
 
   <section class="loop-panel" aria-label="Loop controls">
     <div class="loop-summary">
-      <span>{loopActive ? "Loop active" : loopPending ? "Choose B" : "Loop off"}</span>
+      <span
+        >{loopActive
+          ? "Loop active"
+          : loopPending
+            ? "Choose B"
+            : "Loop off"}</span
+      >
       <span>A {pointA === null ? "—" : formatTime(pointA)}</span>
       <span>B {pointB === null ? "—" : formatTime(pointB)}</span>
     </div>
