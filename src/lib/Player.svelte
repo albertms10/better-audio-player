@@ -551,6 +551,7 @@
         class="transport-button pill"
         onclick={() => jump(-1)}
         aria-label="Jump back"
+        disabled={!audioUrl}
       >
         <!-- https://feathericons.dev/?search=rotate-ccw&iconset=feather -->
         <svg
@@ -576,6 +577,7 @@
         class="transport-button play"
         aria-label={paused ? "Play" : "Pause"}
         onclick={togglePlayback}
+        disabled={!audioUrl}
       >
         {#if paused}
           <!-- https://feathericons.dev/?search=play&iconset=feather -->
@@ -623,6 +625,7 @@
             ? "Set loop end (B)"
             : "Set loop start (A)"}
         onclick={cycleLoop}
+        disabled={!audioUrl}
       >
         <!-- https://feathericons.dev/?search=repeat&iconset=feather -->
         <svg
@@ -650,6 +653,7 @@
         class="transport-button pill"
         onclick={() => jump(1)}
         aria-label="Jump forward"
+        disabled={!audioUrl}
       >
         <!-- https://feathericons.dev/?search=rotate-cw&iconset=feather -->
         <svg
