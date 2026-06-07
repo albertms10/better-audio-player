@@ -5,7 +5,6 @@
   let audio: HTMLAudioElement;
   let timelineSection: HTMLElement;
   let audioUrl = $state<string | null>(null);
-  let urlInput = $state("");
   let clipboardStatus = $state<"unknown" | "valid" | "invalid">("unknown");
   let gradientSeed = $state<number>(Math.floor(Math.random() * 4294967296));
   let objectAudioUrl: string | null = null;
@@ -217,7 +216,6 @@
           }
 
           clipboardStatus = "valid";
-          urlInput = text;
           revokeObjectAudioUrl();
           await loadAudioSource(text, hashStringToSeed(text));
           return;
